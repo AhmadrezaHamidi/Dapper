@@ -1,0 +1,56 @@
+@model IEnumerable<DapperSampleProject.ViewModels.ProductViewModel>
+@{
+    ViewData["Title"] = "Product List And Category List";
+}
+<div class="card m-3">
+    <div class="card-header">
+        Product List And Category List
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onchange="toggleAllCheckbox(this)"/></th>
+                    <th>Id</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Supplier</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="@item.ProductId"/>
+                        </td>
+                        <td>@item.ProductId</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.CategoryName</td>
+                        <td>@item.SupplierName</td>
+                        <td>@item.UnitPrice</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Category Id</th>
+                    <th>Category Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.Categories)
+                {
+                    <tr>
+                       <td>@item.CategoryId</td>
+                       <td>@item.CategoryName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

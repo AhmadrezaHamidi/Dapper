@@ -1,0 +1,76 @@
+@model IEnumerable<DapperSampleProject.ViewModels.ProductViewModel>
+@{
+    ViewData["Title"] = "Product List";
+}
+<div class="card m-3">
+    <div class="card-header">
+        Product List
+    </div>
+    <div class="card-body">
+        <a class="btn btn-outline-primary mb-2" asp-action="Create">Create New Product</a>
+        <a class="btn btn-outline-info mb-2" asp-action="BulkInsert">Bulk Insert</a>
+        <a class="btn btn-outline-secondary mb-2" asp-action="ShowProductsAndCategories">Show Products And Categories With Multiple Query</a>
+        <button class="btn btn-danger" onclick="deleteSelectedRow()">Delete Selected Row</button>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onchange="toggleAllCheckbox(this)"/></th>
+                    <th>Id</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Supplier</th>
+                    <th>Price</th>
+                    <th>
+                     
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="@item.ProductId"/>
+                        </td>
+                        <td>@item.ProductId</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.CategoryName</td>
+                        <td>@item.SupplierName</td>
+                        <td>@item.UnitPrice</td>
+                        <td>
+                            <a asp-action="edit" asp-route-id="@item.ProductId" class="btn btn-warning btn-sm">Edit</a>
+                            @* <a href="/Product/Edit/@item.ProductId" class="btn btn-warning btn-sm">Edit</a> *@
+
+                            <a asp-action="delete" asp-route-id="@item.ProductId" class="btn btn-danger btn-sm"
+                            onclick="return confirm('are you sure remove item ?')">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function toggleAllCheckbox(el){
+            if($(el).is(':checked')){
+                $('table tbody input[type="checkbox"]').attr('checked', 'checked');
+            } else {
+                $('table tbody input[type="checkbox"]').removeAttr('checked');
+            }
+        }
+
+        function deleteSelectedRow(){
+            let ids = [];
+            let rows =  $('table tbody input[type="checkbox"]:checked');
+            rows.each(function() { ids.push($(this).attr("id"))});
+           
+            $.post("/Product/BulkDelete", {ids:ids}, function() {
+                alert("remove succ...");
+                location.reload();
+            })
+        }
+
+    </script>
+}
